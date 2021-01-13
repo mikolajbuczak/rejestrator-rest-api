@@ -115,6 +115,11 @@
             // Check if employeeID is set
             if ( isset($allPairs['employeeID']) ) {
                 $newEmployeeID = $allPairs['employeeID'];
+                
+                // Check if the length of new employeeID is 4
+                if( strlen($newEmployeeID) != 4) {
+                    exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid new employeeID length'), JSON_PRETTY_PRINT));
+                }
 
                 $sqlTest = $conn->query("SELECT COUNT(*) FROM employees where employeeID='$newEmployeeID'");
                 $testResult = $sqlTest->fetch_assoc();
@@ -130,6 +135,12 @@
             // Check if pin is set
             if ( isset($allPairs['pin']) ) {
                 $newPin = $allPairs['pin'];
+
+                // Check if the length of new pin is 4
+                if( strlen($newPin) != 4) {
+                    exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid new pin length'), JSON_PRETTY_PRINT));
+                }
+
                 array_push($array, "pin='$newPin'");
             }
 
