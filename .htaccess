@@ -1,3 +1,6 @@
 RewriteEngine On
 RewriteRule ^api/employees/?$ api/employees.php
 RewriteRule ^api/employees/([0-9]+)?$ api/employees.php?employeeID=$1
+
+RewriteRule ^api/administrators/?$ api/administrators.php
+RewriteRule ^api/administrators/([0-9]+)?$ api/administrators.php?administratorID=$1
