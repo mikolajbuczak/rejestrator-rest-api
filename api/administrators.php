@@ -96,6 +96,11 @@
 
         $administratorID = $conn->real_escape_string($_GET['administratorID']);
 
+        // Check if the length of administratorID is 4
+        if( strlen($administratorID) != 4) {
+            exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid administratorID length'), JSON_PRETTY_PRINT));
+        }
+
         $checkIfExists = $conn->query("SELECT COUNT(*) FROM administrators where administratorID='$administratorID'");
         $result = $checkIfExists->fetch_assoc();
 
@@ -206,6 +211,11 @@
         }
 
         $administratorID = $conn->real_escape_string($_GET['administratorID']);
+
+        // Check if the length of administratorID is 4
+        if( strlen($administratorID) != 4) {
+            exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid administratorID length'), JSON_PRETTY_PRINT));
+        }
 
         $checkIfExists = $conn->query("SELECT COUNT(*) FROM administrators where administratorID='$administratorID'");
         $result = $checkIfExists->fetch_assoc();
