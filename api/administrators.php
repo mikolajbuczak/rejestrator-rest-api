@@ -105,100 +105,98 @@
         }
 
         // Read arguments
-        $data = file_get_contents('php://input');
-        
-        if ( strpos($data, '=') ==  true ) {
-            $allPairs = array();
-            $data = explode('&', $data);
-            
-            foreach($data as $pair) {
-                $pair = explode('=', $pair);
-                $allPairs[$pair[0]] = $pair[1];
-            }
-            
-            // Check if there is any argument
-            if ( empty($allPairs) ) {
-                exit(json_encode(array('status' => 'failed', 'reason' => 'No arguments are set'), JSON_PRETTY_PRINT));
-            }
-            
-            $sqlQuery = "UPDATE administrators SET ";
+        $data = urldecode(file_get_contents('php://input'));
 
-            $array = array();
-
-            // Check if administratorID is set
-            if ( isset($allPairs['administratorID']) ) {
-                $newAdministratorID = $allPairs['administratorID'];
-                
-                // Check if the length of new administratorID is 4
-                if ( strlen($newAdministratorID) != 4 ) {
-                    exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid administratorID length'), JSON_PRETTY_PRINT));
-                }
-
-                $sqlTest = $conn->query("SELECT COUNT(*) FROM administrators where administratorID='$newAdministratorID'");
-                $testResult = $sqlTest->fetch_assoc();
-                
-                // Check if new administratorID is already used
-                if ( $testResult['COUNT(*)'] != 0 ) {
-                    exit(json_encode(array('status' => 'failed', 'reason' => 'This administratorID is already used'), JSON_PRETTY_PRINT));
-                }
-
-                array_push($array, "administratorID='$newAdministratorID'");
-            }
-
-            // Check if username is set
-            if ( isset($allPairs['username']) ) {
-                $newUsername = $allPairs['username'];
-
-                // Check if the length of new username is > 0
-                if ( strlen($newUsername) <= 0) {
-                    exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid username length'), JSON_PRETTY_PRINT));
-                }
-
-                $sqlTest = $conn->query("SELECT COUNT(*) FROM administrators where username='$newUsername'");
-                $testResult = $sqlTest->fetch_assoc();
-                
-                // Check if new username is already used
-                if ( $testResult['COUNT(*)'] != 0 ) {
-                    exit(json_encode(array('status' => 'failed', 'reason' => 'This username is already used'), JSON_PRETTY_PRINT));
-                }
-
-
-                array_push($array, "username='$newUsername'");
-            }
-
-            // Check if password is set
-            if ( isset($allPairs['password']) ) {
-                $newPassword = $allPairs['password'];
-
-                // Check if the length of new password is > 0
-                if( strlen($newPassword) <= 0) {
-                    exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid password length'), JSON_PRETTY_PRINT));
-                }
-
-                array_push($array, "password='$newPassword'");
-            }
-
-            // Check if name is set
-            if ( isset($allPairs['name']) ) {
-                $newName = $allPairs['name'];
-                array_push($array, "name='$newName'");
-            }
-
-            // Check if surname is set
-            if ( isset($allPairs['surname']) ) {
-                $newSurname = $allPairs['surname'];
-                array_push($array, "surname='$newSurname'");
-            }
-
-            $sqlQuery .= implode(', ', $array);
-
-            $sqlQuery .= " WHERE administratorID=$administratorID";
-
-            $sql = $conn->query($sqlQuery);
-
-            // Success
-            exit(json_encode(array('status' => 'success'), JSON_PRETTY_PRINT));
+        // Check if any argument is set
+        if ( !strpos($data, '=') ) {
+            exit(json_encode(array('status' => 'failed', 'reason' => 'No arguments are set'), JSON_PRETTY_PRINT));
         }
+        
+        $allPairs = array();
+        $data = explode('&', $data);
+        
+        foreach($data as $pair) {
+            $pair = explode('=', $pair);
+            $allPairs[$pair[0]] = $pair[1];
+        }
+        
+        $sqlQuery = "UPDATE administrators SET ";
+
+        $array = array();
+
+        // Check if administratorID is set
+        if ( isset($allPairs['administratorID']) ) {
+            $newAdministratorID = $allPairs['administratorID'];
+            
+            // Check if the length of new administratorID is 4
+            if ( strlen($newAdministratorID) != 4 ) {
+                exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid administratorID length'), JSON_PRETTY_PRINT));
+            }
+
+            $sqlTest = $conn->query("SELECT COUNT(*) FROM administrators where administratorID='$newAdministratorID'");
+            $testResult = $sqlTest->fetch_assoc();
+            
+            // Check if new administratorID is already used
+            if ( $testResult['COUNT(*)'] != 0 ) {
+                exit(json_encode(array('status' => 'failed', 'reason' => 'This administratorID is already used'), JSON_PRETTY_PRINT));
+            }
+
+            array_push($array, "administratorID='$newAdministratorID'");
+        }
+
+        // Check if username is set
+        if ( isset($allPairs['username']) ) {
+            $newUsername = $allPairs['username'];
+
+            // Check if the length of new username is > 0
+            if ( strlen($newUsername) <= 0) {
+                exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid username length'), JSON_PRETTY_PRINT));
+            }
+
+            $sqlTest = $conn->query("SELECT COUNT(*) FROM administrators where username='$newUsername'");
+            $testResult = $sqlTest->fetch_assoc();
+            
+            // Check if new username is already used
+            if ( $testResult['COUNT(*)'] != 0 ) {
+                exit(json_encode(array('status' => 'failed', 'reason' => 'This username is already used'), JSON_PRETTY_PRINT));
+            }
+
+
+            array_push($array, "username='$newUsername'");
+        }
+
+        // Check if password is set
+        if ( isset($allPairs['password']) ) {
+            $newPassword = $allPairs['password'];
+
+            // Check if the length of new password is > 0
+            if( strlen($newPassword) <= 0) {
+                exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid password length'), JSON_PRETTY_PRINT));
+            }
+
+            array_push($array, "password='$newPassword'");
+        }
+
+        // Check if name is set
+        if ( isset($allPairs['name']) ) {
+            $newName = $allPairs['name'];
+            array_push($array, "name='$newName'");
+        }
+
+        // Check if surname is set
+        if ( isset($allPairs['surname']) ) {
+            $newSurname = $allPairs['surname'];
+            array_push($array, "surname='$newSurname'");
+        }
+
+        $sqlQuery .= implode(', ', $array);
+
+        $sqlQuery .= " WHERE administratorID=$administratorID";
+
+        $sql = $conn->query($sqlQuery);
+
+        // Success
+        exit(json_encode(array('status' => 'success'), JSON_PRETTY_PRINT));
     }
     //DELETE
     else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
