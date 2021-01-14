@@ -56,7 +56,7 @@
             $sqlTest1 = $conn->query("SELECT COUNT(*) FROM administrators where username='$username'");
             $testResult1 = $sqlTest1->fetch_assoc();
 
-            // Check if administrator with this administratorID already exists
+            // Check if administrator with selected username already exists
             if ( $testResult1['COUNT(*)'] != 0 ) {
                 exit(json_encode(array('status' => 'failed', 'reason' => 'This username is already used'), JSON_PRETTY_PRINT));
             }

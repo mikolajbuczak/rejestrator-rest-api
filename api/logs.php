@@ -48,7 +48,7 @@
             $sqlTest = $conn->query("SELECT COUNT(*) FROM employees where employeeID='$employeeID'");
             $testResult = $sqlTest->fetch_assoc();
 
-            // Check if employee to update exists
+            // Check if employee with selected employeeID exists
             if ( $testResult['COUNT(*)'] == 0 ) {
                 exit(json_encode(array('status' => 'failed', 'reason' => 'Employee with this employeeId does not exist'), JSON_PRETTY_PRINT));
             }
