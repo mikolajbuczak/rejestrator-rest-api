@@ -4,3 +4,6 @@ RewriteRule ^api/employees/([0-9]+)?$ api/employees.php?employeeID=$1
 
 RewriteRule ^api/administrators/?$ api/administrators.php
 RewriteRule ^api/administrators/([0-9]+)?$ api/administrators.php?administratorID=$1
+
+RewriteRule ^api/logs/?$ api/logs.php
+RewriteRule ^api/logs/([0-9]+)?$ api/logs.php?employeeID=$1
