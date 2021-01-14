@@ -83,6 +83,11 @@
 
         $employeeID = $conn->real_escape_string($_GET['employeeID']);
 
+        // Check if the length of employeeID is 4
+        if( strlen($employeeID) != 4) {
+            exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid employeeID length'), JSON_PRETTY_PRINT));
+        }
+
         $checkIfExists = $conn->query("SELECT COUNT(*) FROM employees where employeeID='$employeeID'");
         $result = $checkIfExists->fetch_assoc();
 
@@ -185,6 +190,11 @@
         }
 
         $employeeID = $conn->real_escape_string($_GET['employeeID']);
+
+        // Check if the length of employeeID is 4
+        if( strlen($employeeID) != 4) {
+            exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid employeeID length'), JSON_PRETTY_PRINT));
+        }
 
         $checkIfExists = $conn->query("SELECT COUNT(*) FROM employees where employeeID='$employeeID'");
         $result = $checkIfExists->fetch_assoc();
