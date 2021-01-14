@@ -12,3 +12,7 @@ RewriteRule ^api/loginAdmin/(.*)/(.*)?$ api/loginAdmin.php?username=$1&password=
 
 RewriteRule ^api/logs/?$ api/logs.php
 RewriteRule ^api/logs/([0-9]+)?$ api/logs.php?employeeID=$1
+
+
+RewriteRule ^api/tasksAvailable/?$ api/tasksAvailable.php
+RewriteRule ^api/tasksAvailable/([0-9]+)?$ api/tasksAvailable.php?employeeID=$1
