@@ -7,6 +7,7 @@
         // Check if the id is set
         if ( !isset($_GET['id']) ) {
             http_response_code(404);
+            $conn->close();
             exit();
         }
 
@@ -16,6 +17,7 @@
 
         // Success
         http_response_code(200);
+        $conn->close();
         exit();
     }
 ?>

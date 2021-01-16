@@ -4,6 +4,7 @@
 
      if($_SERVER['REQUEST_METHOD'] != 'POST'){
         http_response_code(400);
+        $conn->close();
         exit();
      }
 
@@ -18,15 +19,18 @@
         // Check if employee exists
         if ( $testResult['COUNT(*)'] != 0 ) {
             http_response_code(404);
+            $conn->close();
             exit();
         }
 
         // Success
         http_response_code(200);
+        $conn->close();
         exit();
     }
     else {
         http_response_code(400);
+        $conn->close();
         exit();
     }
 ?>

@@ -4,6 +4,7 @@
 
      if($_SERVER['REQUEST_METHOD'] != 'GET'){
         http_response_code(400);
+        $conn->close();
         exit();
      }
 
@@ -17,5 +18,6 @@
         $data[] = $d;
     }
     http_response_code(200);
+    $conn->close();
     exit(json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 ?>
