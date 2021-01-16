@@ -2,34 +2,31 @@
     // Connection variable used to communicate with DB
     $conn = new mysqli('localhost', 'root', '', 'rejestrator');
 
-    // GET
-    if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-        // GET /loginEmployee/employeeID/pin
-        $id = $conn->real_escape_string($_GET['employeeID']);
-        $pin = $conn->real_escape_string($_GET['pin']);
+    // POST
+    $employeeId = $_POST['employeeId'];
+    $employeePin = $_POST['employeePin'];
 
-        // Check if the length of employeeID is 4
-        if( strlen($id) != 4) {
-            exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid employeeID length'), JSON_PRETTY_PRINT));
-        }
+    $query_check_employee = "select * from employees where employeeID = '$employeeId' and pin = '$employeePin'";
 
-        // Check if the length of pin is 4
-        if( strlen($pin) != 4) {
-            exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid pin length'), JSON_PRETTY_PRINT));
-        }
+    $result = mysqli_query($conn, $query_check_employee);
 
-        $data = array();
-        $sql = $conn->query("SELECT COUNT(*)
-                                FROM employees 
-                                WHERE employeeID='$id'
-                                AND pin='$pin'");
-        
-        $result = $sql->fetch_assoc();
-
-        // Check if corrent combination on employeeID and pin
-        if ( $result['COUNT(*)'] == 0 ) {
-            exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid employeeID or pin'), JSON_PRETTY_PRINT));
-        }
-        exit(json_encode(array('status' => 'success'), JSON_PRETTY_PRINT));
+    if(mysqli_num_rows($result) == 0)
+    {
+        $response['success'] = "false";
+        $response['message'] = "Nie poprawne dane logowania.";
     }
+    else
+    {
+        $row = mysqli_fetch_assoc($result);
+
+        $response['success'] = "true";
+        $response['message'] = "Zalogowano.";
+
+        $response['employeeId'] = $row['employeeID'];
+        $response['employeePin'] = $row['pin'];
+    }
+
+    exit(json_encode($response));
+    mysqli_close($conn);
+
 ?>

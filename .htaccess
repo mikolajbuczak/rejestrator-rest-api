@@ -6,7 +6,7 @@ RewriteRule ^api/employees/([0-9]+)?$ api/employees.php?employeeID=$1
 RewriteRule ^api/administrators/?$ api/administrators.php
 RewriteRule ^api/administrators/([0-9]+)?$ api/administrators.php?administratorID=$1
 
-RewriteRule ^api/loginEmployee/([0-9]+)/([0-9]+)?$ api/loginEmployee.php?employeeID=$1&pin=$2
+RewriteRule ^api/loginEmployee/?$ api/loginEmployee.php
 
 RewriteRule ^api/loginAdmin/(.*)/(.*)?$ api/loginAdmin.php?username=$1&password=$2
 

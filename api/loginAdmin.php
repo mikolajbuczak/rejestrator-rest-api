@@ -20,6 +20,6 @@
         if ( $result['COUNT(*)'] == 0 ) {
             exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid username or password'), JSON_PRETTY_PRINT));
         }
-        exit(json_encode(array('status' => 'success'), JSON_PRETTY_PRINT));
+        exit(json_encode(array('status' => 'success', 'reason' => ''), JSON_PRETTY_PRINT));
     }
 ?>
