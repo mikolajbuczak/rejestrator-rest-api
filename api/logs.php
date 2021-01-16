@@ -10,7 +10,7 @@
             $data = array();
             $sql = $conn->query("SELECT employeeID, date
                                  FROM logs 
-                                 WHERE employeeID='$id'");
+                                 WHERE employeeID='$id' ORDER BY date DESC");
             while($d = $sql->fetch_assoc()) {
                 $data[] = $d;
             }

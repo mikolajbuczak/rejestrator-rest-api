@@ -8,7 +8,7 @@
         if(isset($_GET['employeeID'])) {
             $id = $conn->real_escape_string($_GET['employeeID']);
             $data = array();
-            $sql = $conn->query("SELECT employeeID, task
+            $sql = $conn->query("SELECT id, task
                                  FROM tasks 
                                  WHERE employeeID='$id'");
             while($d = $sql->fetch_assoc()) {
@@ -18,7 +18,7 @@
         // GET /tasksAvailable
         else {
             $data = array();
-            $sql = $conn->query("SELECT employeeID, task 
+            $sql = $conn->query("SELECT id, task 
                                  FROM tasks");
             while($d = $sql->fetch_assoc()) {
                 $data[] = $d;
