@@ -30,3 +30,5 @@ RewriteRule ^api/startTask/([0-9]+)?$ api/startTask.php?id=$1
 RewriteRule ^api/endTask/([0-9]+)?$ api/endTask.php?id=$1
 
 RewriteRule ^api/canAddAdmin/?$ api/canAddAdmin.php
+
+RewriteRule ^api/canAddEmployee/?$ api/canAddEmployee.php
