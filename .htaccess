@@ -16,3 +16,10 @@ RewriteRule ^api/logs/([0-9]+)?$ api/logs.php?employeeID=$1
 
 RewriteRule ^api/tasksAvailable/?$ api/tasksAvailable.php
 RewriteRule ^api/tasksAvailable/([0-9]+)?$ api/tasksAvailable.php?employeeID=$1
+
+RewriteRule ^api/tasksInProgress/?$ api/tasksInProgress.php
+RewriteRule ^api/tasksInProgress/([0-9]+)?$ api/tasksInProgress.php?employeeID=$1
+
+RewriteRule ^api/tasksDone/?$ api/tasksDone.php
+RewriteRule ^api/tasksDone/([0-9]+)?$ api/tasksDone.php?employeeID=$1
+RewriteRule ^api/tasksDone/([0-9]+)/(.*)?$ api/tasksDone.php?employeeID=$1&endDate$2

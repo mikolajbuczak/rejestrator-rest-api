@@ -15,10 +15,10 @@
     }
 
     $data = $conn->query("SELECT employeeID, name, surname, shift FROM employees WHERE employeeID='$employeeID' AND pin='$pin'");
-    $repsonse = $data->fetch_assoc();
+    $response = $data->fetch_assoc();
 
     http_response_code(200);
-    exit(json_encode($repsonse, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+    exit(json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 
     $conn->close();
 ?>
