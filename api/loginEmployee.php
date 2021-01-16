@@ -2,6 +2,11 @@
     // Connection variable used to communicate with DB
     $conn = new mysqli('localhost', 'root', '', 'rejestrator');
 
+    if($_SERVER['REQUEST_METHOD'] != 'POST') {
+        http_response_code(400);
+        exit();
+    }
+
     $employeeID = $_POST['employeeId'];
     $pin = $_POST['pin'];
 
