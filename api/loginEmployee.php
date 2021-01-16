@@ -2,31 +2,24 @@
     // Connection variable used to communicate with DB
     $conn = new mysqli('localhost', 'root', '', 'rejestrator');
 
-    // POST
-    $employeeId = $_POST['employeeId'];
-    $employeePin = $_POST['employeePin'];
+    if ( isset($_SERVER['PHP_AUTH_USER']) &&
+         isset($_SERVER['PHP_AUTH_PW']) ) {
+            $employeeID = urldecode($_SERVER['PHP_AUTH_USER']);
+            $pin = urldecode($_SERVER['PHP_AUTH_PW']);
 
-    $query_check_employee = "select * from employees where employeeID = '$employeeId' and pin = '$employeePin'";
+            $test = $conn->query("SELECT COUNT(*) FROM employees WHERE employeeID='$employeeID' AND pin='$pin'");
+            $testResult = $test->fetch_assoc();
 
-    $result = mysqli_query($conn, $query_check_employee);
+            // Check if employee exists
+            if ( $testResult['COUNT(*)'] == 0 ) {
+                http_response_code(404);
+                exit();
+            }
 
-    if(mysqli_num_rows($result) == 0)
-    {
-        $response['success'] = "false";
-        $response['message'] = "Nie poprawne dane logowania.";
+            $data = $conn->query("SELECT employeeID, name, surname, shift FROM employees WHERE employeeID='$employeeID' AND pin='$pin'");
+            $repsonse = $data->fetch_assoc();
+
+            http_response_code(200);
+            exit(json_encode($repsonse, JSON_PRETTY_PRINT));
     }
-    else
-    {
-        $row = mysqli_fetch_assoc($result);
-
-        $response['success'] = "true";
-        $response['message'] = "Zalogowano.";
-
-        $response['employeeId'] = $row['employeeID'];
-        $response['employeePin'] = $row['pin'];
-    }
-
-    exit(json_encode($response));
-    mysqli_close($conn);
-
 ?>
