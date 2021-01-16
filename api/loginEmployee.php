@@ -26,6 +26,4 @@
     http_response_code(200);
     $conn->close();
     exit(json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
-
-    $conn->close();
 ?>

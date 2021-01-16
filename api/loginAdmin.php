@@ -20,7 +20,7 @@
         exit();
     }
 
-    $data = $conn->query("SELECT administratorID, name, surname FROM administrators WHERE WHERE username='$username' AND password='$password'");
+    $data = $conn->query("SELECT administratorID, name, surname FROM administrators WHERE username='$username' AND password='$password'");
     $response = $data->fetch_assoc();
 
     http_response_code(200);
