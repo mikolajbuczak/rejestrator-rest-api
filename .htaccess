@@ -12,6 +12,7 @@ RewriteRule ^api/loginAdmin/(.*)/(.*)?$ api/loginAdmin.php?username=$1&password=
 
 RewriteRule ^api/logs/?$ api/logs.php
 RewriteRule ^api/logs/([0-9]+)?$ api/logs.php?employeeID=$1
+RewriteRule ^api/logs/([0-9]+)/(.*)?$ api/logs.php?employeeID=$1&date=$2
 
 
 RewriteRule ^api/tasksAvailable/?$ api/tasksAvailable.php
@@ -22,4 +23,8 @@ RewriteRule ^api/tasksInProgress/([0-9]+)?$ api/tasksInProgress.php?employeeID=$
 
 RewriteRule ^api/tasksDone/?$ api/tasksDone.php
 RewriteRule ^api/tasksDone/([0-9]+)?$ api/tasksDone.php?employeeID=$1
-RewriteRule ^api/tasksDone/([0-9]+)/(.*)?$ api/tasksDone.php?employeeID=$1&endDate$2
+RewriteRule ^api/tasksDone/([0-9]+)/(.*)?$ api/tasksDone.php?employeeID=$1&endDate=$2
+
+RewriteRule ^api/startTask/([0-9]+)?$ api/startTask.php?id=$1
+
+RewriteRule ^api/endTask/([0-9]+)?$ api/endTask.php?id=$1

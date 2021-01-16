@@ -4,27 +4,27 @@
 
      // GET
     if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-        // GET /tasksDone/employeeID
-        if(isset($_GET['employeeID'])) {
-            $id = $conn->real_escape_string($_GET['employeeID']);
-            $data = array();
-            $sql = $conn->query("SELECT *
-                                 FROM tasksdone 
-                                 WHERE employeeID='$id'
-                                 ORDER BY enddate DESC");
-            while($d = $sql->fetch_assoc()) {
-                $data[] = $d;
-            }
-        }
         // GET /tasksDone/employeeID/endDate
-        else if(isset($_GET['employeeID'])) {
+        if(isset($_GET['employeeID']) && isset($_GET['endDate'])) {
             $id = $conn->real_escape_string($_GET['employeeID']);
             $date = $conn->real_escape_string($_GET['endDate']);
             $data = array();
             $sql = $conn->query("SELECT *
                                  FROM tasksdone 
                                  WHERE employeeID='$id'
-                                 AND enddate='$date'");
+                                 AND enddate LIKE '$date%' ORDER BY enddate DESC, id DESC");
+            while($d = $sql->fetch_assoc()) {
+                $data[] = $d;
+            }
+        }
+        // GET /tasksDone/employeeID
+        else if(isset($_GET['employeeID'])) {
+            $id = $conn->real_escape_string($_GET['employeeID']);
+            $data = array();
+            $sql = $conn->query("SELECT *
+                                 FROM tasksdone 
+                                 WHERE employeeID='$id'
+                                 ORDER BY enddate DESC, id DESC");
             while($d = $sql->fetch_assoc()) {
                 $data[] = $d;
             }
@@ -34,13 +34,13 @@
             $data = array();
             $sql = $conn->query("SELECT *
                                  FROM tasksdone
-                                 ORDER BY enddate DESC");
+                                 ORDER BY enddate DESC, id DESC");
             while($d = $sql->fetch_assoc()) {
                 $data[] = $d;
             }
         }
         http_response_code(200);
-        exit(json_encode($data, JSON_PRETTY_PRINT));
+        exit(json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
     }
     // POST
     else if ($_SERVER['REQUEST_METHOD'] == 'POST') {

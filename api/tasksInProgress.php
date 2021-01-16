@@ -11,7 +11,7 @@
             $sql = $conn->query("SELECT *
                                  FROM tasksinprogress 
                                  WHERE employeeID='$id' 
-                                 ORDER BY date ASC");
+                                 ORDER BY date ASC, id DESC");
             while($d = $sql->fetch_assoc()) {
                 $data[] = $d;
             }
@@ -21,12 +21,12 @@
             $data = array();
             $sql = $conn->query("SELECT *
                                  FROM tasksinprogress 
-                                 ORDER BY date ASC");
+                                 ORDER BY date DESC, id DESC");
             while($d = $sql->fetch_assoc()) {
                 $data[] = $d;
             }
         }
-        http_response_code(200)
+        http_response_code(200);
         exit(json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
     }
     // POST
@@ -62,7 +62,7 @@
         else {
             // Missing arguments
             http_response_code(404);
-            exit()
+            exit();
         }
     }
     //DELETE
