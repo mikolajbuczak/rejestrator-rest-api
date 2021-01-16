@@ -4,7 +4,7 @@
 
      // GET
     if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-        // GET /tasksDome/employeeID
+        // GET /tasksDone/employeeID
         if(isset($_GET['employeeID'])) {
             $id = $conn->real_escape_string($_GET['employeeID']);
             $data = array();

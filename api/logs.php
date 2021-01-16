@@ -75,14 +75,14 @@
     else if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
         // Check if the employeeID is set
         if ( !isset($_GET['employeeID']) ) {
-            exit(json_encode(array('status' => 'failed', 'reason' => 'Employee is not selected'), JSON_PRETTY_PRINT));
+            exit(json_encode(array('status' => 'failed', 'reason' => 'Employee is not selected'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         }
 
         $employeeID = $conn->real_escape_string($_GET['employeeID']);
 
         // Check if the length of new employeeID is 4
         if( strlen($employeeID) != 4) {
-            exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid new employeeID length'), JSON_PRETTY_PRINT));
+            exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid new employeeID length'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         }
 
         $checkIfExists = $conn->query("SELECT COUNT(*) FROM logs where employeeID='$employeeID'");
@@ -90,7 +90,7 @@
 
         // Check if logs with selected employeeID exist
         if ( $result['COUNT(*)'] == 0 ) {
-            exit(json_encode(array('status' => 'failed', 'reason' => 'Logs with this employeeId do not exist'), JSON_PRETTY_PRINT));
+            exit(json_encode(array('status' => 'failed', 'reason' => 'Logs with this employeeId do not exist'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         }
 
         // Read arguments
@@ -98,7 +98,7 @@
 
         // Check if any argument is set
         if ( !strpos($data, '=') ) {
-            exit(json_encode(array('status' => 'failed', 'reason' => 'No arguments are set'), JSON_PRETTY_PRINT));
+            exit(json_encode(array('status' => 'failed', 'reason' => 'No arguments are set'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         }
 
         $allPairs = array();
@@ -119,7 +119,7 @@
             
             // Check if the length of new employeeID is 4
             if( strlen($newEmployeeID) != 4) {
-                exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid new employeeID length'), JSON_PRETTY_PRINT));
+                exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid new employeeID length'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
             }
 
             $sqlTest = $conn->query("SELECT COUNT(*) FROM employees where employeeID='$newEmployeeID'");
@@ -127,7 +127,7 @@
             
             // Check if employee with new employeeID exists
             if ( $testResult['COUNT(*)'] == 0 ) {
-                exit(json_encode(array('status' => 'failed', 'reason' => 'Employee with new employeeID does not exist'), JSON_PRETTY_PRINT));
+                exit(json_encode(array('status' => 'failed', 'reason' => 'Employee with new employeeID does not exist'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
             }
 
             array_push($array, "employeeID='$newEmployeeID'");
@@ -139,7 +139,7 @@
 
             /// Check if new date format is valid
             if( !verifyDate($newDate) ) {
-                exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid new date format'), JSON_PRETTY_PRINT));
+                exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid new date format'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
             }
 
             array_push($array, "date='$newDate'");
@@ -152,20 +152,20 @@
         $sql = $conn->query($sqlQuery);
 
         // Success
-        exit(json_encode(array('status' => 'success'), JSON_PRETTY_PRINT));
+        exit(json_encode(array('status' => 'success'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
     }
     //DELETE
     else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
         // Check if the employeeID is set
         if ( !isset($_GET['employeeID']) ) {
-            exit(json_encode(array('status' => 'failed', 'reason' => 'Employee is not selected'), JSON_PRETTY_PRINT));
+            exit(json_encode(array('status' => 'failed', 'reason' => 'Employee is not selected'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         }
 
         $employeeID = $conn->real_escape_string($_GET['employeeID']);
 
         // Check if the length of new employeeID is 4
         if( strlen($employeeID) != 4) {
-            exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid new employeeID length'), JSON_PRETTY_PRINT));
+            exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid new employeeID length'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         }
 
         $checkIfExists = $conn->query("SELECT COUNT(*) FROM logs where employeeID='$employeeID'");
@@ -173,13 +173,13 @@
 
         // Check if logs with selected employeeID exist
         if ( $result['COUNT(*)'] == 0 ) {
-            exit(json_encode(array('status' => 'failed', 'reason' => 'Logs with this employeeId do not exist'), JSON_PRETTY_PRINT));
+            exit(json_encode(array('status' => 'failed', 'reason' => 'Logs with this employeeId do not exist'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         }
 
         $conn->query("DELETE FROM logs WHERE employeeID='$employeeID'");
 
         // Success
-        exit(json_encode(array('status' => 'success'), JSON_PRETTY_PRINT));
+        exit(json_encode(array('status' => 'success'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
     }
 
     function verifyDate($date, $strict = true)

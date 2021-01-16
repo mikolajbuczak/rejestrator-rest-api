@@ -33,7 +33,7 @@
 
             // Check if the url is correct
             if ( isset($_GET['administratorID']) ) {
-                exit(json_encode(array('status' => 'failed', 'reason' => 'You cannot create administrator using this url. Use /administrators/ instead'), JSON_PRETTY_PRINT));
+                exit(json_encode(array('status' => 'failed', 'reason' => 'You cannot create administrator using this url. Use /administrators/ instead'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
             }
         
             // Get all arguments
@@ -45,12 +45,12 @@
 
             // Check if the length of administratorID is 4
             if( strlen($administratorID) != 4) {
-                exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid administratorID length'), JSON_PRETTY_PRINT));
+                exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid administratorID length'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
             }
 
             // Check if the length of username is > 0
             if( strlen($username) <= 0) {
-                exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid username length'), JSON_PRETTY_PRINT));
+                exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid username length'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
             }
 
             $sqlTest1 = $conn->query("SELECT COUNT(*) FROM administrators where username='$username'");
@@ -58,12 +58,12 @@
 
             // Check if administrator with selected username already exists
             if ( $testResult1['COUNT(*)'] != 0 ) {
-                exit(json_encode(array('status' => 'failed', 'reason' => 'This username is already used'), JSON_PRETTY_PRINT));
+                exit(json_encode(array('status' => 'failed', 'reason' => 'This username is already used'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
             }
 
             // Check if the length of password is > 0
             if( strlen($password) <= 0) {
-                exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid password length'), JSON_PRETTY_PRINT));
+                exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid password length'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
             }
 
             $sqlTest2 = $conn->query("SELECT COUNT(*) FROM administrators where administratorID='$administratorID'");
@@ -71,7 +71,7 @@
 
             // Check if administrator with this administratorID already exists
             if ( $testResult2['COUNT(*)'] != 0 ) {
-                exit(json_encode(array('status' => 'failed', 'reason' => 'This administratorID is already used'), JSON_PRETTY_PRINT));
+                exit(json_encode(array('status' => 'failed', 'reason' => 'This administratorID is already used'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
             }
 
             $sql = $conn->query("INSERT INTO administrators 
@@ -84,21 +84,21 @@
         }
         else {
             // Missing arguments
-            exit(json_encode(array('status' => 'failed', 'reason' => 'Required arguments are missing'), JSON_PRETTY_PRINT));
+            exit(json_encode(array('status' => 'failed', 'reason' => 'Required arguments are missing'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         }
     }
     //PUT
     else if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
         // Check if the administrator to update is selected
         if ( !isset($_GET['administratorID']) ) {
-            exit(json_encode(array('status' => 'failed', 'reason' => 'Administrator is not selected'), JSON_PRETTY_PRINT));
+            exit(json_encode(array('status' => 'failed', 'reason' => 'Administrator is not selected'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         }
 
         $administratorID = $conn->real_escape_string($_GET['administratorID']);
 
         // Check if the length of administratorID is 4
         if( strlen($administratorID) != 4) {
-            exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid administratorID length'), JSON_PRETTY_PRINT));
+            exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid administratorID length'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         }
 
         $checkIfExists = $conn->query("SELECT COUNT(*) FROM administrators where administratorID='$administratorID'");
@@ -106,7 +106,7 @@
 
         // Check if administrator to update exists
         if ( $result['COUNT(*)'] == 0 ) {
-            exit(json_encode(array('status' => 'failed', 'reason' => 'Administrator with this administratorID does not exist'), JSON_PRETTY_PRINT));
+            exit(json_encode(array('status' => 'failed', 'reason' => 'Administrator with this administratorID does not exist'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         }
 
         // Read arguments
@@ -114,7 +114,7 @@
 
         // Check if any argument is set
         if ( !strpos($data, '=') ) {
-            exit(json_encode(array('status' => 'failed', 'reason' => 'No arguments are set'), JSON_PRETTY_PRINT));
+            exit(json_encode(array('status' => 'failed', 'reason' => 'No arguments are set'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         }
         
         $allPairs = array();
@@ -135,7 +135,7 @@
             
             // Check if the length of new administratorID is 4
             if ( strlen($newAdministratorID) != 4 ) {
-                exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid administratorID length'), JSON_PRETTY_PRINT));
+                exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid administratorID length'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
             }
 
             $sqlTest = $conn->query("SELECT COUNT(*) FROM administrators where administratorID='$newAdministratorID'");
@@ -143,7 +143,7 @@
             
             // Check if new administratorID is already used
             if ( $testResult['COUNT(*)'] != 0 ) {
-                exit(json_encode(array('status' => 'failed', 'reason' => 'This administratorID is already used'), JSON_PRETTY_PRINT));
+                exit(json_encode(array('status' => 'failed', 'reason' => 'This administratorID is already used'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
             }
 
             array_push($array, "administratorID='$newAdministratorID'");
@@ -155,7 +155,7 @@
 
             // Check if the length of new username is > 0
             if ( strlen($newUsername) <= 0) {
-                exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid username length'), JSON_PRETTY_PRINT));
+                exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid username length'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
             }
 
             $sqlTest = $conn->query("SELECT COUNT(*) FROM administrators where username='$newUsername'");
@@ -163,7 +163,7 @@
             
             // Check if new username is already used
             if ( $testResult['COUNT(*)'] != 0 ) {
-                exit(json_encode(array('status' => 'failed', 'reason' => 'This username is already used'), JSON_PRETTY_PRINT));
+                exit(json_encode(array('status' => 'failed', 'reason' => 'This username is already used'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
             }
 
 
@@ -176,7 +176,7 @@
 
             // Check if the length of new password is > 0
             if( strlen($newPassword) <= 0) {
-                exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid password length'), JSON_PRETTY_PRINT));
+                exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid password length'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
             }
 
             array_push($array, "password='$newPassword'");
@@ -201,20 +201,20 @@
         $sql = $conn->query($sqlQuery);
 
         // Success
-        exit(json_encode(array('status' => 'success'), JSON_PRETTY_PRINT));
+        exit(json_encode(array('status' => 'success'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
     }
     //DELETE
     else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
         // Check if the administrator to delete is selected
         if ( !isset($_GET['administratorID']) ) {
-            exit(json_encode(array('status' => 'failed', 'reason' => 'Administrator is not selected'), JSON_PRETTY_PRINT));
+            exit(json_encode(array('status' => 'failed', 'reason' => 'Administrator is not selected'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         }
 
         $administratorID = $conn->real_escape_string($_GET['administratorID']);
 
         // Check if the length of administratorID is 4
         if( strlen($administratorID) != 4) {
-            exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid administratorID length'), JSON_PRETTY_PRINT));
+            exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid administratorID length'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         }
 
         $checkIfExists = $conn->query("SELECT COUNT(*) FROM administrators where administratorID='$administratorID'");
@@ -222,12 +222,12 @@
 
         // Check if administrator to delete exists
         if ( $result['COUNT(*)'] == 0 ) {
-            exit(json_encode(array('status' => 'failed', 'reason' => 'Administrator with this administratorID does not exist'), JSON_PRETTY_PRINT));
+            exit(json_encode(array('status' => 'failed', 'reason' => 'Administrator with this administratorID does not exist'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         }
 
         $conn->query("DELETE FROM administrators WHERE administratorID='$administratorID'");
 
         // Success
-        exit(json_encode(array('status' => 'success'), JSON_PRETTY_PRINT));
+        exit(json_encode(array('status' => 'success'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
     }
 ?>
