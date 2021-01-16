@@ -1,7 +1,6 @@
 <?php
     // Connection variable used to communicate with DB
     $conn = new mysqli('localhost', 'root', '', 'rejestrator');
-    $conn->set_charset("utf-8");
 
     if ( isset($_SERVER['PHP_AUTH_USER']) &&
          isset($_SERVER['PHP_AUTH_PW']) ) {
@@ -21,6 +20,7 @@
             $repsonse = $data->fetch_assoc();
 
             http_response_code(200);
-            exit(json_encode($repsonse, JSON_PRETTY_PRINT));
+            exit(json_encode($repsonse, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
     }
+    $conn->close();
 ?>
