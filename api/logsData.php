@@ -9,7 +9,7 @@
      }
 
     $data = array();
-    $sql = $conn->query("SELECT employees.name, employees.surname, logs.date 
+    $sql = $conn->query("SELECT employees.employeeID, employees.name, employees.surname, logs.date 
                             FROM employees
                             JOIN logs
                             ON logs.employeeID=employees.employeeID
