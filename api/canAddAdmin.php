@@ -13,12 +13,25 @@
         $adminID = $conn->real_escape_string($_POST['adminID']);
         $username = $conn->real_escape_string($_POST['username']);
 
-        $test = $conn->query("SELECT COUNT(*) FROM administrators WHERE administratorID='$adminID' OR username='$username'");
+        $test = $conn->query("SELECT COUNT(*) FROM administrators WHERE administratorID='$adminID'");
         $testResult = $test->fetch_assoc();
+
+        $test1 = $conn->query("SELECT COUNT(*) FROM administrators WHERE username='$username'");
+        $testResult1 = $test1->fetch_assoc();
     
-        // Check if employee exists
-        if ( $testResult['COUNT(*)'] != 0 ) {
+        // Check if admin exists
+        if ( $testResult['COUNT(*)'] != 0 && $testResult1['COUNT(*)'] != 0) {
             http_response_code(404);
+            $conn->close();
+            exit();
+        }
+        else if ( $testResult['COUNT(*)'] != 0 ) {
+            http_response_code(402);
+            $conn->close();
+            exit();
+        }
+        else if ( $testResult1['COUNT(*)'] != 0 ) {
+            http_response_code(401);
             $conn->close();
             exit();
         }

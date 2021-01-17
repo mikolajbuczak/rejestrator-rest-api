@@ -13,7 +13,7 @@
         $employeeID = $conn->real_escape_string($_POST['employeeID']);
         $task = $conn->real_escape_string($_POST['task']);
 
-        $test = $conn->query("SELECT COUNT(*) FROM tasks WHERE employeeID='$employeeID' AND task='$task");
+        $test = $conn->query("SELECT COUNT(*) FROM tasks WHERE employeeID='$employeeID' AND task='$task'");
         $testResult = $test->fetch_assoc();
     
         // Check if employee exists
