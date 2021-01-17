@@ -21,6 +21,8 @@
                 $data[] = $d;
             }
         }
+        http_response_code(200);
+        $conn->close();
         exit(json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
     }
     // POST
@@ -30,6 +32,12 @@
             isset($_POST['name']) && 
             isset($_POST['surname']) && 
             isset($_POST['shift'])) {
+
+            if( isset($_GET['employeeID']) ) {
+                http_response_code(400);
+                $conn->close();
+                exit();
+            }
             
             // Get all arguments
             $employeeID = $conn->real_escape_string($_POST['employeeID']);
@@ -40,17 +48,23 @@
 
             // Check if the length of employeeID is 4
             if( strlen($employeeID) != 4) {
-                exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid employeeID length'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+                http_response_code(404);
+                $conn->close();
+                exit();
             }
 
             // Check if the length of pin is 4
             if( strlen($pin) != 4) {
-                exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid pin length'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+                http_response_code(404);
+                $conn->close();
+                exit();
             }
 
             // Check if shift uses enum('dzienny', 'nocny')
             if( strtolower($shift) != 'dzienny' && strtolower($shift) != 'nocny' ) {
-                exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid shift'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+                http_response_code(404);
+                $conn->close();
+                exit();
             }
 
             $sqlTest = $conn->query("SELECT COUNT(*) FROM employees where employeeID='$employeeID'");
@@ -58,7 +72,9 @@
 
             // Check if employee with this employeeID already exists
             if ( $testResult['COUNT(*)'] != 0 ) {
-                exit(json_encode(array('status' => 'failed', 'reason' => 'This employeeID is already used'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+                http_response_code(404);
+                $conn->close();
+                exit();
             }
 
             $sql = $conn->query("INSERT INTO employees 
@@ -67,25 +83,33 @@
                                 ('$employeeID', '$pin', '$name', '$surname', '$shift')");
 
             // Success
-            exit(json_encode(array('status' => 'success')));
+            http_response_code(200);
+            $conn->close();
+            exit();
         }
         else {
             // Missing arguments
-            exit(json_encode(array('status' => 'failed', 'reason' => 'Required arguments are missing'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+            http_response_code(404);
+            $conn->close();
+            exit();
         }
     }
     //PUT
     else if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
         // Check if the employee to update is selected
         if ( !isset($_GET['employeeID']) ) {
-            exit(json_encode(array('status' => 'failed', 'reason' => 'Employee is not selected'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+            http_response_code(400);
+            $conn->close();
+            exit();
         }
 
         $employeeID = $conn->real_escape_string($_GET['employeeID']);
 
         // Check if the length of employeeID is 4
         if( strlen($employeeID) != 4) {
-            exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid employeeID length'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+            http_response_code(404);
+            $conn->close();
+            exit();
         }
 
         $checkIfExists = $conn->query("SELECT COUNT(*) FROM employees where employeeID='$employeeID'");
@@ -93,7 +117,9 @@
 
         // Check if employee to update exists
         if ( $result['COUNT(*)'] == 0 ) {
-            exit(json_encode(array('status' => 'failed', 'reason' => 'Employee with this employeeId does not exist'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+            http_response_code(404);
+            $conn->close();
+            exit();
         }
 
         // Read arguments
@@ -101,7 +127,9 @@
         
         // Check if any argument is set
         if ( !strpos($data, '=') ) {
-            exit(json_encode(array('status' => 'failed', 'reason' => 'No arguments are set'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+            http_response_code(404);
+            $conn->close();
+            exit();
         }
 
         $allPairs = array();
@@ -123,7 +151,9 @@
             
             // Check if the length of new employeeID is 4
             if( strlen($newEmployeeID) != 4) {
-                exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid new employeeID length'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+                http_response_code(404);
+                $conn->close();
+                exit();
             }
 
             $sqlTest = $conn->query("SELECT COUNT(*) FROM employees where employeeID='$newEmployeeID'");
@@ -131,7 +161,9 @@
             
             // Check if new employeeID is already used
             if ( $testResult['COUNT(*)'] != 0 ) {
-                exit(json_encode(array('status' => 'failed', 'reason' => 'This employeeID is already used'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+                http_response_code(404);
+                $conn->close();
+                exit();
             }
 
             array_push($array, "employeeID='$newEmployeeID'");
@@ -143,7 +175,9 @@
 
             // Check if the length of new pin is 4
             if( strlen($newPin) != 4) {
-                exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid new pin length'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+                http_response_code(404);
+                $conn->close();
+                exit();
             }
 
             array_push($array, "pin='$newPin'");
@@ -167,7 +201,9 @@
 
             // Check if shift uses enum('dzienny', 'nocny')
             if( strtolower($newShift) != 'dzienny' && strtolower($newShift) != 'nocny' ) {
-                exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid shift'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+                http_response_code(404);
+                $conn->close();
+                exit();
             }
 
             array_push($array, "shift='$newShift'");
@@ -180,33 +216,26 @@
         $sql = $conn->query($sqlQuery);
 
         // Success
-        exit(json_encode(array('status' => 'success'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+        http_response_code(200);
+        $conn->close();
+        exit();
     }
     //DELETE
     else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
         // Check if the employee to delete is selected
         if ( !isset($_GET['employeeID']) ) {
-            exit(json_encode(array('status' => 'failed', 'reason' => 'Employee is not selected'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+            http_response_code(400);
+            $conn->close();
+            exit();
         }
 
         $employeeID = $conn->real_escape_string($_GET['employeeID']);
 
-        // Check if the length of employeeID is 4
-        if( strlen($employeeID) != 4) {
-            exit(json_encode(array('status' => 'failed', 'reason' => 'Invalid employeeID length'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
-        }
-
-        $checkIfExists = $conn->query("SELECT COUNT(*) FROM employees where employeeID='$employeeID'");
-        $result = $checkIfExists->fetch_assoc();
-
-        // Check if employee to delete exists
-        if ( $result['COUNT(*)'] == 0 ) {
-            exit(json_encode(array('status' => 'failed', 'reason' => 'Employee with this employeeId does not exist'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
-        }
-
         $conn->query("DELETE FROM employees WHERE employeeID='$employeeID'");
 
         // Success
-        exit(json_encode(array('status' => 'success'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+        http_response_code(200);
+        $conn->close();
+        exit();
     }
 ?>
