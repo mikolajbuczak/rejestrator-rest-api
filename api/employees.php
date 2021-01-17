@@ -21,6 +21,8 @@
                 $data[] = $d;
             }
         }
+        http_response_code(200);
+        $conn->close();
         exit(json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
     }
     // POST
@@ -30,6 +32,12 @@
             isset($_POST['name']) && 
             isset($_POST['surname']) && 
             isset($_POST['shift'])) {
+
+            if( isset($_GET['employeeID']) ) {
+                http_response_code(400);
+                $conn->close();
+                exit();
+            }
             
             // Get all arguments
             $employeeID = $conn->real_escape_string($_POST['employeeID']);
@@ -41,18 +49,21 @@
             // Check if the length of employeeID is 4
             if( strlen($employeeID) != 4) {
                 http_response_code(404);
+                $conn->close();
                 exit();
             }
 
             // Check if the length of pin is 4
             if( strlen($pin) != 4) {
                 http_response_code(404);
+                $conn->close();
                 exit();
             }
 
             // Check if shift uses enum('dzienny', 'nocny')
             if( strtolower($shift) != 'dzienny' && strtolower($shift) != 'nocny' ) {
                 http_response_code(404);
+                $conn->close();
                 exit();
             }
 
@@ -62,6 +73,7 @@
             // Check if employee with this employeeID already exists
             if ( $testResult['COUNT(*)'] != 0 ) {
                 http_response_code(404);
+                $conn->close();
                 exit();
             }
 
@@ -72,11 +84,13 @@
 
             // Success
             http_response_code(200);
+            $conn->close();
             exit();
         }
         else {
             // Missing arguments
             http_response_code(404);
+            $conn->close();
             exit();
         }
     }
@@ -84,7 +98,9 @@
     else if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
         // Check if the employee to update is selected
         if ( !isset($_GET['employeeID']) ) {
-            exit(json_encode(array('status' => 'failed', 'reason' => 'Employee is not selected'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+            http_response_code(400);
+            $conn->close();
+            exit();
         }
 
         $employeeID = $conn->real_escape_string($_GET['employeeID']);
@@ -92,6 +108,7 @@
         // Check if the length of employeeID is 4
         if( strlen($employeeID) != 4) {
             http_response_code(404);
+            $conn->close();
             exit();
         }
 
@@ -101,6 +118,7 @@
         // Check if employee to update exists
         if ( $result['COUNT(*)'] == 0 ) {
             http_response_code(404);
+            $conn->close();
             exit();
         }
 
@@ -110,6 +128,7 @@
         // Check if any argument is set
         if ( !strpos($data, '=') ) {
             http_response_code(404);
+            $conn->close();
             exit();
         }
 
@@ -133,6 +152,7 @@
             // Check if the length of new employeeID is 4
             if( strlen($newEmployeeID) != 4) {
                 http_response_code(404);
+                $conn->close();
                 exit();
             }
 
@@ -142,6 +162,7 @@
             // Check if new employeeID is already used
             if ( $testResult['COUNT(*)'] != 0 ) {
                 http_response_code(404);
+                $conn->close();
                 exit();
             }
 
@@ -155,6 +176,7 @@
             // Check if the length of new pin is 4
             if( strlen($newPin) != 4) {
                 http_response_code(404);
+                $conn->close();
                 exit();
             }
 
@@ -180,6 +202,7 @@
             // Check if shift uses enum('dzienny', 'nocny')
             if( strtolower($newShift) != 'dzienny' && strtolower($newShift) != 'nocny' ) {
                 http_response_code(404);
+                $conn->close();
                 exit();
             }
 
@@ -194,25 +217,29 @@
 
         // Success
         http_response_code(200);
+        $conn->close();
         exit();
     }
     //DELETE
     else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
         // Check if the employee to delete is selected
         if ( !isset($_GET['employeeID']) ) {
-            http_response_code(404);
+            http_response_code(400);
+            $conn->close();
             exit();
         }
 
         $employeeID = $conn->real_escape_string($_GET['employeeID']);
 
-        $checkIfExists = $conn->query("SELECT COUNT(*) FROM employees where employeeID='$employeeID'");
-        $result = $checkIfExists->fetch_assoc();
-
         $conn->query("DELETE FROM employees WHERE employeeID='$employeeID'");
+        $conn->query("DELETE FROM tasks WHERE employeeID='$employeeID'");
+        $conn->query("DELETE FROM tasksinprogress WHERE employeeID='$employeeID'");
+        $conn->query("DELETE FROM tasksdone WHERE employeeID='$employeeID'");
+        $conn->query("DELETE FROM logs WHERE employeeID='$employeeID'");
 
         // Success
         http_response_code(200);
+        $conn->close();
         exit();
     }
 ?>

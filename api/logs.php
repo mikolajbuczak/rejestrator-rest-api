@@ -36,6 +36,7 @@
         }
     
         http_response_code(200);
+        $conn->close();
         exit(json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
     }
     // POST
@@ -45,7 +46,8 @@
 
             // Check if the url is correct
             if ( isset($_GET['employeeID']) ) {
-                http_response_code(404);
+                http_response_code(400);
+                $conn->close();
                 exit();
             }
             
@@ -56,6 +58,7 @@
             // Check if date format is valid
             if( !verifyDate($date) ) {
                 http_response_code(404);
+                $conn->close();
                 exit();
             }
 
@@ -66,11 +69,13 @@
 
             // Success
             http_response_code(200);
+            $conn->close();
             exit();
         }
         else {
             // Missing arguments
             http_response_code(404);
+            $conn->close();
             exit();
         }
     }
@@ -78,7 +83,8 @@
     else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
         // Check if the employeeID is set
         if ( !isset($_GET['employeeID']) ) {
-            http_response_code(404);
+            http_response_code(400);
+            $conn->close();
             exit();
         }
 
@@ -88,6 +94,7 @@
 
         // Success
         http_response_code(200);
+        $conn->close();
         exit();
     }
 

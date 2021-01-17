@@ -35,4 +35,6 @@ RewriteRule ^api/canAddEmployee/?$ api/canAddEmployee.php
 
 RewriteRule ^api/canAddTask/?$ api/canAddTask.php
 
+RewriteRule ^api/canStartEndTask/?$ api/canStartEndTask.php
+
 RewriteRule ^api/logsData/?$ api/logsData.php

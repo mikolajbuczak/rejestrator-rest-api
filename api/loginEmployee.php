@@ -8,7 +8,7 @@
         exit();
     }
 
-    $employeeID = $_POST['employeeId'];
+    $employeeID = $_POST['employeeID'];
     $pin = $_POST['pin'];
 
     $test = $conn->query("SELECT COUNT(*) FROM employees WHERE employeeID='$employeeID' AND pin='$pin'");
@@ -21,7 +21,7 @@
         exit();
     }
 
-    $data = $conn->query("SELECT employeeID, name, surname, shift FROM employees WHERE employeeID='$employeeID' AND pin='$pin'");
+    $data = $conn->query("SELECT employeeID, pin, name, surname, shift FROM employees WHERE employeeID='$employeeID' AND pin='$pin'");
     $response = $data->fetch_assoc();
 
     http_response_code(200);
