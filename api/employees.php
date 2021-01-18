@@ -15,7 +15,7 @@
         // GET /employees
         else {
             $data = array();
-            $sql = $conn->query("SELECT employeeID, name, surname
+            $sql = $conn->query("SELECT employeeID, pin, name, surname, shift
                                  FROM employees");
             while($d = $sql->fetch_assoc()) {
                 $data[] = $d;
@@ -161,9 +161,12 @@
             
             // Check if new employeeID is already used
             if ( $testResult['COUNT(*)'] != 0 ) {
-                http_response_code(404);
-                $conn->close();
-                exit();
+                if( $newEmployeeID != $employeeID)
+                {
+                    http_response_code(404);
+                    $conn->close();
+                    exit();
+                }
             }
 
             array_push($array, "employeeID='$newEmployeeID'");
@@ -214,6 +217,14 @@
         $sqlQuery .= " WHERE employeeID=$employeeID";
 
         $sql = $conn->query($sqlQuery);
+
+        if( isset($allPairs['employeeID']) )
+        {
+            $sql = $conn->query("UPDATE logs SET employeeID='$newEmployeeID'");
+            $sql = $conn->query("UPDATE tasks SET employeeID='$newEmployeeID'");
+            $sql = $conn->query("UPDATE tasksinprogress SET employeeID='$newEmployeeID'");
+            $sql = $conn->query("UPDATE tasksdone SET employeeID='$newEmployeeID'");
+        }
 
         // Success
         http_response_code(200);

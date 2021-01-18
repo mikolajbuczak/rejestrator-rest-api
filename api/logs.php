@@ -4,8 +4,18 @@
 
     // GET
     if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+        // GET /logs/employeeID/date
+        if(isset($_GET['employeeID']) && isset($_GET['date'])){
+            $id = $conn->real_escape_string($_GET['employeeID']);
+            $date = $conn->real_escape_string($_GET['date']);
+            $data = array();
+            $sql = $conn->query("SELECT employeeID, date
+                                 FROM logs 
+                                 WHERE `employeeID`='$id' AND date LIKE '$date%' ORDER BY date ASC LIMIT 1");
+            $data = $sql -> fetch_assoc();
+        }
         // GET /logs/employeeID
-        if(isset($_GET['employeeID'])) {
+        else if(isset($_GET['employeeID'])) {
             $id = $conn->real_escape_string($_GET['employeeID']);
             $data = array();
             $sql = $conn->query("SELECT employeeID, date
@@ -14,16 +24,6 @@
             while($d = $sql->fetch_assoc()) {
                 $data[] = $d;
             }
-        }
-        // GET /logs/employeeID/date
-        else if(isset($_GET['employeeID']) && isset($_GET['date'])){
-            $id = $conn->real_escape_string($_GET['employeeID']);
-            $date = $conn->real_escape_string($_GET['date']);
-            $data = array();
-            $sql = $conn->query("SELECT employeeID, date
-                                 FROM logs 
-                                 WHERE `employeeID`='$id' AND date LIKE '$date' ORDER BY date ASC LIMIT 1");
-            $data = $sql -> fetch_assoc();
         }
         // GET /logs
         else {
@@ -36,7 +36,6 @@
         }
     
         http_response_code(200);
-        $conn->close();
         exit(json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
     }
     // POST
@@ -46,8 +45,7 @@
 
             // Check if the url is correct
             if ( isset($_GET['employeeID']) ) {
-                http_response_code(400);
-                $conn->close();
+                http_response_code(404);
                 exit();
             }
             
@@ -58,7 +56,6 @@
             // Check if date format is valid
             if( !verifyDate($date) ) {
                 http_response_code(404);
-                $conn->close();
                 exit();
             }
 
@@ -69,13 +66,11 @@
 
             // Success
             http_response_code(200);
-            $conn->close();
             exit();
         }
         else {
             // Missing arguments
             http_response_code(404);
-            $conn->close();
             exit();
         }
     }
@@ -83,8 +78,7 @@
     else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
         // Check if the employeeID is set
         if ( !isset($_GET['employeeID']) ) {
-            http_response_code(400);
-            $conn->close();
+            http_response_code(404);
             exit();
         }
 
@@ -94,7 +88,6 @@
 
         // Success
         http_response_code(200);
-        $conn->close();
         exit();
     }
 
