@@ -220,10 +220,10 @@
 
         if( isset($allPairs['employeeID']) )
         {
-            $sql = $conn->query("UPDATE logs SET employeeID='$newEmployeeID'");
-            $sql = $conn->query("UPDATE tasks SET employeeID='$newEmployeeID'");
-            $sql = $conn->query("UPDATE tasksinprogress SET employeeID='$newEmployeeID'");
-            $sql = $conn->query("UPDATE tasksdone SET employeeID='$newEmployeeID'");
+            $sql = $conn->query("UPDATE logs SET employeeID='$newEmployeeID' WHERE employeeID='$employeeID'");
+            $sql = $conn->query("UPDATE tasks SET employeeID='$newEmployeeID' WHERE employeeID='$employeeID'");
+            $sql = $conn->query("UPDATE tasksinprogress SET employeeID='$newEmployeeID' WHERE employeeID='$employeeID'");
+            $sql = $conn->query("UPDATE tasksdone SET employeeID='$newEmployeeID' WHERE employeeID='$employeeID'");
         }
 
         // Success
