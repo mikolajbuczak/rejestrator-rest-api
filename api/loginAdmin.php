@@ -1,4 +1,6 @@
 <?php
+    require_once("functions.php");
+
     // Connection variable used to communicate with DB
     $conn = new mysqli('localhost', 'root', '', 'rejestrator');
 
@@ -8,22 +10,28 @@
         exit();
     }
 
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    $authString = getallheaders()['Authorization'];
 
-    $test = $conn->query("SELECT COUNT(*) FROM administrators WHERE username='$username' AND password='$password'");
-    $testResult = $test->fetch_assoc();
-
-    // Check if employee exists
-    if ( $testResult['COUNT(*)'] == 0 ) {
+    if( $authString == "") 
+    {
         http_response_code(404);
         $conn->close();
         exit();
     }
 
-    $data = $conn->query("SELECT administratorID, name, surname FROM administrators WHERE username='$username' AND password='$password'");
-    $response = $data->fetch_assoc();
+    if( !auth($authString)) {
+        http_response_code(404);
+        $conn->close();
+        exit();
+    }
 
+    $cred = getCredentials($authString);
+    $username = $cred[0];
+    $password = $cred[1];
+
+    $sql = $conn->query("SELECT administratorID, name, surname FROM administrators WHERE username='$username' AND password='$password'");
+    $response = $sql->fetch_assoc();
+    
     http_response_code(200);
     $conn->close();
     exit(json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
