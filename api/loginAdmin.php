@@ -29,8 +29,25 @@
     $username = $cred[0];
     $password = $cred[1];
 
-    $sql = $conn->query("SELECT administratorID, name, surname FROM administrators WHERE username='$username' AND password='$password'");
-    $response = $sql->fetch_assoc();
+    $query_check_employee = ("SELECT administratorID, password, name, surname FROM administrators WHERE username='$username' AND password='$password'");
+
+    $result = mysqli_query($conn, $query_check_employee);
+
+    if(mysqli_num_rows($result) == 0)
+    {
+        http_response_code(404);
+        $conn->close();
+        exit();
+    }
+    else
+    {
+        $row = mysqli_fetch_assoc($result);
+
+        $response['administratorID'] = $row['administratorID'];
+        $response['password'] = base64_encode($row['password']) ;
+        $response['name'] = $row['name'];
+        $response['surname'] = $row['surname'];
+    }
     
     http_response_code(200);
     $conn->close();

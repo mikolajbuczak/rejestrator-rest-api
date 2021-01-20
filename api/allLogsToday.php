@@ -15,7 +15,7 @@
         $date = $conn->real_escape_string($_GET['date']);
 
         $data = array();
-        $sql = $conn->query("SELECT employeeID, date FROM logs WHERE `employeeID`='$id' AND date LIKE '$date%' ORDER BY date ASC");
+        $sql = $conn->query("SELECT employeeID, date FROM logs WHERE `employeeID`='$id' AND date LIKE '$date%' ORDER BY date DESC");
         while($d = $sql->fetch_assoc()) {
             $data[] = $d;
         }
