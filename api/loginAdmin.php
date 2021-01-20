@@ -4,7 +4,7 @@
     // Connection variable used to communicate with DB
     $conn = new mysqli('localhost', 'root', '', 'rejestrator');
 
-    if($_SERVER['REQUEST_METHOD'] != 'POST') {
+    if($_SERVER['REQUEST_METHOD'] != 'GET') {
         http_response_code(400);
         $conn->close();
         exit();
