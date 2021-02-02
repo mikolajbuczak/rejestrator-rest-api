@@ -13,7 +13,7 @@
                             FROM employees
                             JOIN logs
                             ON logs.employeeID=employees.employeeID
-                            ORDER BY logs.date DESC");
+                            ORDER BY str_to_date(logs.date, '%d.%m.%y %H:%i') DESC");
     while($d = $sql->fetch_assoc()) {
         $data[] = $d;
     }

@@ -11,7 +11,7 @@
             $sql = $conn->query("SELECT *
                                  FROM tasksinprogress 
                                  WHERE employeeID='$id' 
-                                 ORDER BY date ASC, id DESC");
+                                 ORDER BY str_to_date(date, '%d.%m.%y %H:%i') ASC, id DESC");
             while($d = $sql->fetch_assoc()) {
                 $data[] = $d;
             }
@@ -21,7 +21,7 @@
             $data = array();
             $sql = $conn->query("SELECT *
                                  FROM tasksinprogress 
-                                 ORDER BY date DESC, id DESC");
+                                 ORDER BY str_to_date(date, '%d.%m.%y %H:%i') DESC, id DESC");
             while($d = $sql->fetch_assoc()) {
                 $data[] = $d;
             }

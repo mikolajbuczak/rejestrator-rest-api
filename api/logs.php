@@ -11,7 +11,7 @@
             $data = array();
             $sql = $conn->query("SELECT employeeID, date
                                  FROM logs 
-                                 WHERE `employeeID`='$id' AND date LIKE '$date%' ORDER BY date ASC LIMIT 1");
+                                 WHERE `employeeID`='$id' AND date LIKE '$date%' ORDER BY str_to_date(date, '%d.%m.%y %H:%i') ASC LIMIT 1");
             $data = $sql -> fetch_assoc();
         }
         // GET /logs/employeeID
@@ -20,7 +20,7 @@
             $data = array();
             $sql = $conn->query("SELECT employeeID, date
                                  FROM logs 
-                                 WHERE employeeID='$id' ORDER BY date DESC");
+                                 WHERE employeeID='$id' ORDER BY str_to_date(date, '%d.%m.%y %H:%i') DESC");
             while($d = $sql->fetch_assoc()) {
                 $data[] = $d;
             }

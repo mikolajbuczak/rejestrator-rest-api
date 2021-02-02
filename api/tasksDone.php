@@ -12,7 +12,7 @@
             $sql = $conn->query("SELECT *
                                  FROM tasksdone 
                                  WHERE employeeID='$id'
-                                 AND enddate LIKE '$date%' ORDER BY enddate DESC, id ASC");
+                                 AND enddate LIKE '$date%' ORDER BY str_to_date(enddate, '%d.%m.%y %H:%i') DESC, id ASC");
             while($d = $sql->fetch_assoc()) {
                 $data[] = $d;
             }
@@ -24,7 +24,7 @@
             $sql = $conn->query("SELECT *
                                  FROM tasksdone 
                                  WHERE employeeID='$id'
-                                 ORDER BY enddate DESC, id ASC");
+                                 ORDER BY str_to_date(enddate, '%d.%m.%y %H:%i') DESC, id ASC");
             while($d = $sql->fetch_assoc()) {
                 $data[] = $d;
             }
@@ -34,7 +34,7 @@
             $data = array();
             $sql = $conn->query("SELECT *
                                  FROM tasksdone
-                                 ORDER BY enddate DESC, id ASC");
+                                 ORDER BY str_to_date(enddate, '%d.%m.%y %H:%i') DESC, id ASC");
             while($d = $sql->fetch_assoc()) {
                 $data[] = $d;
             }
