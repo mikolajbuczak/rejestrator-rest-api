@@ -40,3 +40,4 @@ RewriteRule ^api/canAddTask/?$ api/canAddTask.php
 RewriteRule ^api/canStartEndTask/?$ api/canStartEndTask.php
 
 RewriteRule ^api/logsData/?$ api/logsData.php
+RewriteRule ^api/logsData/([0-9]+)?$ api/logsData.php?employeeID=$1
